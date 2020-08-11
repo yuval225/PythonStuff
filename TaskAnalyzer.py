@@ -3,23 +3,24 @@ class Task():
         self.startTime = startTime
         self.endTime = endTime
         self.workers = workers
-        self.parallelTasks = []
+        self.parallelTasks = set()
         self.seen = False
     
     @staticmethod
     def setParallelTasks(taskArray):
         """
         takes array of tasks and add parallel tasks into each task.
+        can be used as preprocess function
         """
         for idx, task1 in enumerate(taskArray):
             for idx2 in range(idx+1,len(taskArray)):
                 task2 = taskArray[idx2]
                 if task1.startTime >= task2.startTime and task1.startTime <= task2.endTime:
-                    task1.parallelTasks.append(task2)
-                    task2.parallelTasks.append(task1)
+                    task1.parallelTasks.add(task2)
+                    task2.parallelTasks.add(task1)
                 elif task1.startTime <= task2.startTime and task1.endTime >= task2.startTime:
-                    task1.parallelTasks.append(task2)
-                    task2.parallelTasks.append(task1)
+                    task1.parallelTasks.add(task2)
+                    task2.parallelTasks.add(task1)
     
     @staticmethod
     def findMaxParallelWorkers(taskArray):
